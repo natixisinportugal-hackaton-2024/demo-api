@@ -1,0 +1,23 @@
+@Library('89c3@v1')
+@Library('89c3-roa@v1')
+@Library('89c3-config@roa_prd')
+import static fr.bpce.digital.indus.jenkins.pipeline.Pipeline.*
+import fr.bpce.digital.indus.jenkins.pipeline.configuration.RoaConfigBuilderOpenShift
+
+properties([parameters([booleanParam(defaultValue: false, description: 'Indicate that this build is a release build', name: 'release')]), pipelineTriggers([])])
+
+pipeline(RoaConfigBuilderOpenShift.class, this) {
+    env([
+            APPLICATION_NAME: 'nxjgu-api-mocked',
+            // ----- temporaire
+            OPENSHIFT_BUILDCLUSTER: 'insecure://api.ocp-retail-hpr-1.mycaas.intrabpce.fr:6443',
+            //MANAGEPROPERTIES_SKIPPED: true,
+            OPENSHIFT_BUILDPROJECT: 'nxjgu-build-dev-bit',
+            MANAGEPROPERTIES_SKIPPED: true,
+            // ------
+            SONAR_PROJECT_TAGS: '89c3-roa-digital',
+   		    CIA: 'NXJGU',
+            CIA_BLOCK: 'NXJGU',
+            NODE_LABEL: 'java-jdk17-mvn3-6-3'
+    ])
+}
